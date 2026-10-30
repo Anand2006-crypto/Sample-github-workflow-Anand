@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Animal Storage</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial;background:#eef7f2;color:#234}
+header{background:#087f65;color:white;padding:25px;text-align:center}
+.container{max-width:950px;margin:30px auto;padding:15px}
+h2{margin-bottom:15px}
+.form,.animal{background:white;padding:20px;border-radius:15px;
+box-shadow:0 5px 15px #0001;margin-bottom:20px}
+input,select,button{padding:12px;border:1px solid #ddd;
+border-radius:8px;margin:5px;width:calc(100% - 10px)}
+button{background:#0a9c78;color:white;border:0;cursor:pointer;
+font-weight:bold;transition:.3s}
+button:hover{background:#06664f;transform:scale(1.03)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
+.animal{text-align:center;animation:show .5s ease}
+.animal img{width:100%;height:140px;object-fit:cover;border-radius:10px}
+.animal h3{margin:12px}
+.delete{background:#e74c3c}
+#search{margin-bottom:20px}
+@keyframes show{from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:translateY(0)}}
+footer{text-align:center;padding:20px;color:#888}
+</style>
+</head>
+<body>
+<header>
+<h1>🐾 Animal Haven</h1>
+<p>Animal Storage Management System</p>
+</header>
+<div class="container">
+<h2>📊 Dashboard</h2>
+<div class="form">
+<h2>Add New Animal</h2>
+<input id="name" placeholder="Animal Name">
+<input id="species" placeholder="Species">
+<input id="age" type="number" placeholder="Age">
+<select id="gender">
+<option value="">Select Gender</option>
+<option>Male</option><option>Female</option>
+</select>
+<input id="image" placeholder="Image URL">
+<button onclick="addAnimal()">+ Add Animal</button>
+</div>
+<h2>🐶 Stored Animals: <span id="count">0</span></h2>
+<input id="search" placeholder="🔍 Search animals..." oninput="display()">
+<div class="grid" id="animals"></div>
+</div>
+<footer>Animal Haven © 2026 | Made with ❤️</footer>
+<script>
+let data=JSON.parse(localStorage.getItem("animals"))||[];
+function save(){
+localStorage.setItem("animals",JSON.stringify(data));
+display();
+}
+function addAnimal(){
+let name=document.getElementById("name").value.trim();
+let species=document.getElementById("species").value.trim();
+let age=document.getElementById("age").value;
+let gender=document.getElementById("gender").value;
+let image=document.getElementById("image").value.trim();
+if(!name||!species||!age||!gender){
+alert("Please fill all required fields!");return;
+}
+data.push({name,species,age,gender,image});
+save();
+document.querySelectorAll(".form input").forEach(x=>x.value="");
+document.getElementById("gender").value="";
+}
+function removeAnimal(index){
+if(confirm("Delete this animal?")){
+data.splice(index,1);save();
+}
+}
+function display(){
+let search=document.getElementById("search").value.toLowerCase();
+let list=document.getElementById("animals");
+list.innerHTML="";
+let total=0;
+data.forEach((a,i)=>{
+if(!(a.name+" "+a.species).toLowerCase().includes(search))return;
+total++;
+let card=document.createElement("div");
+card.className="animal";
+let img=document.createElement("img");
+img.src=a.image||"https://placehold.co/300x150?text=Animal";
+img.alt=a.name;
+img.onerror=()=>{img.src="https://placehold.co/300x150?text=Animal"};
+let title=document.createElement("h3");
+title.textContent="🐾 "+a.name;
+let details=document.createElement("p");
+details.textContent=`${a.species} | Age: ${a.age} | ${a.gender}`;
+let btn=document.createElement("button");
+btn.className="delete";
+btn.textContent="Delete Animal";
+btn.onclick=()=>removeAnimal(i);
+card.append(img,title,details,btn);
+list.appendChild(card);
+});
+document.getElementById("count").textContent=data.length;
+}
+display();
+</script>
+</body>
+</html>
+
