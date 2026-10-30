@@ -1,9 +1,623 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Hello World</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Sanctuary & Care Hub</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --gray: #95a5a6;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Animation */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        header h1 i {
+            color: var(--primary);
+        }
+
+        header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Main Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Form Styles */
+        h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        .btn-secondary:hover {
+            background: #2980b9;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Controls & Filters */
+        .controls-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .search-box input {
+            padding-left: 40px;
+        }
+
+        .filter-select {
+            width: 160px;
+        }
+
+        /* Animal Cards Grid */
+        .animals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .animal-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: var(--transition);
+            animation: scaleUp 0.4s ease-out forwards;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+
+        .animal-img {
+            height: 140px;
+            background: #dfe6e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #636e72;
+            position: relative;
+        }
+
+        .animal-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .animal-info {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .animal-info h3 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .animal-meta {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .animal-meta span {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .animal-notes {
+            font-size: 0.85rem;
+            color: #777;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            max-height: 50px;
+            overflow-y: auto;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 6px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-edit {
+            background: #eef2f7;
+            color: var(--secondary);
+        }
+        .btn-edit:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fdf0ed;
+            color: var(--accent);
+        }
+        .btn-delete:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleUp {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c5c5c5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello World</h1>
+
+    <div class="container">
+        <header>
+            <h1><i class="fa-solid fa-paw"></i> Animal Sanctuary Hub</h1>
+            <p>Manage, track, and care for your sanctuary animals seamlessly.</p>
+        </header>
+
+        <div class="dashboard">
+            <!-- Left Column: Add / Edit Form -->
+            <div class="card">
+                <h2 id="form-title"><i class="fa-solid fa-circle-plus"></i> Register Animal</h2>
+                <form id="animal-form">
+                    <input type="hidden" id="animal-id">
+                    
+                    <div class="form-group">
+                        <label for="name">Animal Name</label>
+                        <input type="text" id="name" required placeholder="e.g., Max, Bella">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="species">Species Category</label>
+                        <select id="species" required>
+                            <option value="">Select Species</option>
+                            <option value="Dog">🐶 Dog</option>
+                            <option value="Cat">🐱 Cat</option>
+                            <option value="Bird">🐦 Bird</option>
+                            <option value="Reptile">🦎 Reptile</option>
+                            <option value="Other">✨ Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="breed">Breed / Sub-type</label>
+                        <input type="text" id="breed" placeholder="e.g., Golden Retriever">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Age (Years)</label>
+                        <input type="number" id="age" min="0" max="100" step="0.5" placeholder="e.g., 2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Special Care Notes</label>
+                        <textarea id="notes" placeholder="Dietary restrictions, temperament, medical history..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn" id="submit-btn">
+                        <i class="fa-solid fa-save"></i> Save Animal
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancel-btn" style="display: none; margin-top: 10px;">
+                        Cancel Edit
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Column: List & Filter Panel -->
+            <div class="card">
+                <h2><i class="fa-solid fa-list-ul"></i> Animal Directory</h2>
+                
+                <div class="controls-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Search by name, breed...">
+                    </div>
+                    <select id="filter-species" class="filter-select">
+                        <option value="All">All Species</option>
+                        <option value="Dog">Dogs</option>
+                        <option value="Cat">Cats</option>
+                        <option value="Bird">Birds</option>
+                        <option value="Reptile">Reptiles</option>
+                        <option value="Other">Others</option>
+                    </select>
+                </div>
+
+                <div class="animals-grid" id="animals-grid">
+                    <!-- Dynamic Cards Inserted Here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // State Management
+        let animals = JSON.parse(localStorage.getItem('sanctuary_animals')) || [
+            { id: '1', name: 'Simba', species: 'Cat', breed: 'Domestic Shorthair', age: 3, notes: 'Very friendly, loves morning head scratches.' },
+            { id: '2', name: 'Rocky', species: 'Dog', breed: 'German Shepherd', age: 5, notes: 'Needs active daily exercise and grain-free diet.' }
+        ];
+
+        let isEditing = false;
+
+        // DOM Elements
+        const animalForm = document.getElementById('animal-form');
+        const animalsGrid = document.getElementById('animals-grid');
+        const searchInput = document.getElementById('search-input');
+        const filterSpecies = document.getElementById('filter-species');
+        const formTitle = document.getElementById('form-title');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const animalIdInput = document.getElementById('animal-id');
+
+        // Species Icon Mapping Helper
+        const speciesIcons = {
+            'Dog': 'fa-dog',
+            'Cat': 'fa-cat',
+            'Bird': 'fa-dove',
+            'Reptile': 'fa-worm',
+            'Other': 'fa-paw'
+        };
+
+        // Render Cards
+        function renderAnimals() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedFilter = filterSpecies.value;
+
+            const filtered = animals.filter(animal => {
+                const matchesSearch = animal.name.toLowerCase().includes(searchTerm) || 
+                                      animal.breed.toLowerCase().includes(searchTerm);
+                const matchesFilter = selectedFilter === 'All' || animal.species === selectedFilter;
+                return matchesSearch && matchesFilter;
+            });
+
+            if (filtered.length === 0) {
+                animalsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-box-open"></i>
+                        <p>No animals found matching your query.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            animalsGrid.innerHTML = filtered.map(animal => `
+                <div class="animal-card">
+                    <div class="animal-img">
+                        <i class="fa-solid ${speciesIcons[animal.species] || 'fa-paw'}"></i>
+                        <span class="animal-badge">${animal.species}</span>
+                    </div>
+                    <div class="animal-info">
+                        <div>
+                            <h3>${escapeHtml(animal.name)}</h3>
+                            <div class="animal-meta">
+                                <span><i class="fa-solid fa-dna"></i> ${escapeHtml(animal.breed || 'Mixed')}</span>
+                                <span><i class="fa-solid fa-cake-candles"></i> ${animal.age !== '' ? animal.age + ' yrs' : 'N/A'}</span>
+                            </div>
+                            <div class="animal-notes">
+                                ${escapeHtml(animal.notes || 'No special notes provided.')}
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-action btn-edit" onclick="editAnimal('${animal.id}')">
+                                <i class="fa-solid fa-pen"></i> Edit
+                            </button>
+                            <button class="btn-action btn-delete" onclick="deleteAnimal('${animal.id}')">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Save to LocalStorage
+        function saveToStorage() {
+            localStorage.setItem('sanctuary_animals', JSON.stringify(animals));
+        }
+
+        // Form Submit Handler (Create & Update)
+        animalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const id = animalIdInput.value;
+            const name = document.getElementById('name').value.trim();
+            const species = document.getElementById('species').value;
+            const breed = document.getElementById('breed').value.trim();
+            const age = document.getElementById('age').value;
+            const notes = document.getElementById('notes').value.trim();
+
+            if (isEditing && id) {
+                // Update
+                animals = animals.map(animal => 
+                    animal.id === id ? { id, name, species, breed, age, notes } : animal
+                );
+            } else {
+                // Create
+                const newAnimal = {
+                    id: Date.now().toString(),
+                    name,
+                    species,
+                    breed,
+                    age,
+                    notes
+                };
+                animals.unshift(newAnimal);
+            }
+
+            saveToStorage();
+            resetForm();
+            renderAnimals();
+        });
+
+        // Edit Animal
+        window.editAnimal = function(id) {
+            const animal = animals.find(a => a.id === id);
+            if (!animal) return;
+
+            animalIdInput.value = animal.id;
+            document.getElementById('name').value = animal.name;
+            document.getElementById('species').value = animal.species;
+            document.getElementById('breed').value = animal.breed;
+            document.getElementById('age').value = animal.age;
+            document.getElementById('notes').value = animal.notes;
+
+            formTitle.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Edit Animal`;
+            submitBtn.innerHTML = `<i class="fa-solid fa-sync"></i> Update Animal`;
+            cancelBtn.style.display = 'block';
+            isEditing = true;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Cancel Edit Mode
+        cancelBtn.addEventListener('click', resetForm);
+
+        function resetForm() {
+            animalForm.reset();
+            animalIdInput.value = '';
+            formTitle.innerHTML = `<i class="fa-solid fa-circle-plus"></i> Register Animal`;
+            submitBtn.innerHTML = `<i class="fa-solid fa-save"></i> Save Animal`;
+            cancelBtn.style.display = 'none';
+            isEditing = false;
+        }
+
+        // Delete Animal
+        window.deleteAnimal = function(id) {
+            if (confirm('Are you sure you want to remove this animal record?')) {
+                animals = animals.filter(animal => animal.id !== id);
+                saveToStorage();
+                renderAnimals();
+            }
+        }
+
+        // Event Listeners for Filters & Search
+        searchInput.addEventListener('input', renderAnimals);
+        filterSpecies.addEventListener('change', renderAnimals);
+
+        // Security Utility to prevent XSS injection
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Initial Load
+        renderAnimals();
+    </script>
 </body>
 </html>
